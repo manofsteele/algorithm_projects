@@ -3,7 +3,7 @@ class BinaryMinHeap
 
   def initialize(&prc)
     @store = [] 
-    @prc ||= {}
+    prc ||= Proc.new {|a, b| a <=> b}
   end
 
   def count
@@ -34,15 +34,19 @@ class BinaryMinHeap
     return (child_index/2) if child_index.odd?
   end
 
+  # do something with the proc to make it test for difference... 
+  # compare differences between two child nodes 
+
   def self.heapify_down(array, parent_idx, len = array.length, &prc)
-    self.child_indices(len, parent_idx).each do |idx| 
-      until array[parent_idx] >= array[idx]
-        if array[idx] < array[parent_idx] 
+    BinaryMinHeap.child_indices(len, parent_idx).each do |idx, prc| 
+      until prc.call(array[parent_idx], array[idx]) >= 0
+        if prc.call(array[idx], array[parent_idx]) < 0 
           array[idx], array[parent_idx] = array[parent_idx], array[idx]
           parent_idx = idx 
         end 
       end
-    end 
+    end
+    array 
   end
 
   def self.heapify_up(array, child_idx, len = array.length, &prc)
