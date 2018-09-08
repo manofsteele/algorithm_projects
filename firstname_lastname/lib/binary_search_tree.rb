@@ -8,21 +8,24 @@ class BinarySearchTree
   end
 
   def insert(value)
+    newNode = BSTNode.new(value)
     if root.nil?
-      @root = BSTNode.new(value)
+      @root = newNode
     elsif value < root.value 
       if root.left
         left = BinarySearchTree.new(root.left)
         left.insert(value)
       else 
-        root.left = BSTNode.new(value)
+        root.left = newNode 
+        newNode.parent = root
       end
     elsif value >= root.value 
       if root.right
         right = BinarySearchTree.new(root.right)
         right.insert(value)
       else 
-        root.right = BSTNode.new(value) 
+        root.right = newNode 
+        newNode.parent = root   
       end 
     end 
   end
@@ -42,13 +45,64 @@ class BinarySearchTree
   end
 
   def delete(value)
+    tree_node = find(value)
+
+    return nil if tree_node.nil? 
+
+    if root == tree_node 
+      @root = nil 
+      return nil
+    end
+
+    # no-children case
+    if tree_node.left == nil && tree_node.right == nil 
+      if tree_node.parent.left && tree_node.parent.left == tree_node
+        tree_node.parent.left = nil 
+      else 
+        tree_node.parent.right = nil 
+      end 
+    end 
+    
+    # one-child case 
+
+    # two-child case 
+    
   end
 
   # helper method for #delete:
   def maximum(tree_node = @root)
+    if tree_node.right.nil? 
+      return tree_node 
+    else 
+      return maximum(tree_node.right) 
+    end 
   end
 
   def depth(tree_node = @root)
+    depth = 0
+    if tree_node.left.nil? && tree_node.right.nil?
+      depth += 0 
+    end 
+    if tree_node.left || tree_node.right 
+      depth += 1 
+    end 
+    if tree_node.left
+      left_depth = depth(tree_node.left)
+    end 
+    if tree_node.right 
+      right_depth = depth(tree_node.right)
+    end
+    if tree_node.right.nil? 
+      depth += left_depth
+    elsif tree_node.left.nil? 
+      depth += right_depth
+    else 
+      left_depth > right_depth ? depth += left_depth : depth += right_depth
+    end 
+    # while tree_node.left || tree_node.right 
+    #   left_depth = depth(tree_node.left) 
+    #   right_depth = depth(tree_node.right)
+    depth
   end 
 
   def is_balanced?(tree_node = @root)
