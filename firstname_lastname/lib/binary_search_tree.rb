@@ -61,12 +61,33 @@ class BinarySearchTree
       else 
         tree_node.parent.right = nil 
       end 
+      return tree_node
     end 
     
     # one-child case 
+    # child is the left node, 
+    if tree_node.left && tree_node.right.nil? 
+      if tree_node.parent.left && tree_node.parent.left == tree_node
+        tree_node.parent.left = tree_node.left 
+      else 
+        tree_node.parent.right = tree_node.left 
+      end 
+    elsif tree_node.right && tree_node.left.nil? 
+      if tree_node.parent.left && tree_node.parent.left == tree_node
+        tree_node.parent.left = tree_node.right 
+      else 
+        tree_node.parent.right = tree_node.right 
+      end 
+    end 
 
     # two-child case 
-    
+    if tree_node.left && tree_node.right 
+      max = maximum(tree_node.left) 
+      maxval = max.value 
+      delete(maxval)
+      tree_node.value = maxval
+    end 
+
   end
 
   # helper method for #delete:
@@ -79,33 +100,17 @@ class BinarySearchTree
   end
 
   def depth(tree_node = @root)
-    depth = 0
-    if tree_node.left.nil? && tree_node.right.nil?
-      depth += 0 
-    end 
-    if tree_node.left || tree_node.right 
-      depth += 1 
-    end 
-    if tree_node.left
-      left_depth = depth(tree_node.left)
-    end 
-    if tree_node.right 
-      right_depth = depth(tree_node.right)
-    end
-    if tree_node.right.nil? 
-      depth += left_depth
-    elsif tree_node.left.nil? 
-      depth += right_depth
-    else 
-      left_depth > right_depth ? depth += left_depth : depth += right_depth
-    end 
-    # while tree_node.left || tree_node.right 
-    #   left_depth = depth(tree_node.left) 
-    #   right_depth = depth(tree_node.right)
-    depth
+    return 0 if tree_node.nil? || (tree_node.left.nil? && tree_node.right.nil?)
+    left_depth = depth(tree_node.left)
+    right_depth = depth(tree_node.right)
+    depth = 1
+    left_depth > right_depth ? depth += left_depth : depth += right_depth 
+    depth 
   end 
 
   def is_balanced?(tree_node = @root)
+    return true if (depth(tree_node.left) - depth(tree_node.right)).abs <= 0
+    false
   end
 
   def in_order_traversal(tree_node = @root, arr = [])
