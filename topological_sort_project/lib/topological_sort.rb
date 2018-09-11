@@ -21,3 +21,23 @@ def topological_sort(vertices)
   end 
   vertices.empty? ? list : []
 end
+
+
+# def topological_sort(vertices)
+#   list = [] 
+#   stack = []
+#   until vertices.empty? 
+    
+# end 
+
+# def visit(vertex, list, stack)
+#   if vertex.out_edges.empty? 
+#     list.unshift(vertex)
+#     stack.pop()
+#   else 
+#     stack.push(vertex)
+#     vertex.out_edges.each do |vertex| 
+#       visit(vertex, list, stack) 
+#     end 
+#   end 
+# end

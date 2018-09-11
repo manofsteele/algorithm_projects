@@ -37,5 +37,5 @@ def install_order(arr)
   result = result.map { |vertex| vertex.value}
   no_dependencies = (1..max).select { |val| !result.include?(val) }
   result += no_dependencies
-  result.reverse
+  result.uniq.reverse
 end
