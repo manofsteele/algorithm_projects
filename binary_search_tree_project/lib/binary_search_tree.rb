@@ -123,6 +123,40 @@ class BinarySearchTree
     arr  
   end
 
+  def iot_iterative(tree_node = @root, arr = [])
+    return nil if tree_node.nil? 
+    puts tree_node.value if tree_node.left.nil? && tree_node.right.nil? 
+    current_node = tree_node 
+    stack = [] 
+    until current.nil? && stack.empty? 
+      if current 
+        stack << current 
+        current = current.left 
+      else 
+        top_node = stack.pop
+        p top_node.value 
+        current = top_node.right 
+      end 
+    end 
+  end 
+
+  def post_order_traversal(tree_node = @root, arr = []) 
+    return arr if tree_node.nil?
+    return [tree_node.value] if tree_node.left.nil? && tree_node.right.nil?
+    arr += post_order_traversal(tree_node.left) if tree_node.left 
+    arr += post_order_traversal(tree_node.right) if tree_node.right
+    arr += [tree_node.value]
+    arr
+  end 
+
+  def pre_order_traversal(tree_node = @root, arr = []) 
+    return arr if tree_node.nil?
+    return [tree_node.value] if tree_node.left.nil? && tree_node.right.nil?
+    arr += [tree_node.value]
+    arr += pre_order_traversal(tree_node.left) if tree_node.left 
+    arr += pre_order_traversal(tree_node.right) if tree_node.right
+    arr
+  end 
 
   private
   # optional helper methods go here:

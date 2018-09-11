@@ -15,6 +15,17 @@ class LRUCache
   end
 
   def get(key)
+    val = @map.get(key)
+    if val
+      update_node!(@store[key])  
+    else
+      val = @prc.call(key) 
+      @store.append(key, val)
+      @map.set(key, val)
+      eject! if @map.count > @max 
+    end
+    puts val
+    val
   end
 
   def to_s
@@ -28,9 +39,14 @@ class LRUCache
   end
 
   def update_node!(node)
+    @store.remove(node.key) 
+    @store.append(node)
     # suggested helper method; move a node to the end of the list
   end
 
   def eject!
+    key = @store.first
+    @store.remove(key) 
+    @map.delete(key)
   end
 end

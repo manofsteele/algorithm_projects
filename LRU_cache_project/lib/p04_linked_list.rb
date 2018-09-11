@@ -87,13 +87,13 @@ class LinkedList
   def each(&prc)
     current_node = first 
     until current_node == @tail 
-      prc.call(current_node) 
+      yield current_node 
       current_node = current_node.next 
     end
   end
 
   # uncomment when you have `each` working and `Enumerable` included
-  # def to_s
-  #   inject([]) { |acc, node| acc << "[#{node.key}, #{node.val}]" }.join(", ")
-  # end
+  def to_s
+    inject([]) { |acc, node| acc << "[#{node.key}, #{node.val}]" }.join(", ")
+  end
 end
