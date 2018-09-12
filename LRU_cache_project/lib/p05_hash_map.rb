@@ -27,7 +27,9 @@ class HashMap
 
   def get(key)
     # if include?(key)
-      bucket(key).get(key)
+    puts "get is running"
+      val = bucket(key).get(key)
+      p val
     # end 
   end
 

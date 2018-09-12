@@ -15,16 +15,22 @@ class LRUCache
   end
 
   def get(key)
+    p @store.map { |l| l.key}
+    p key
     val = @map.get(key)
+    # p @map
     if val
-      update_node!(@store[key])  
+      node = map[key]
+      update_node!(node)  
     else
+      p "proc being called"
       val = @prc.call(key) 
       @store.append(key, val)
       @map.set(key, val)
-      eject! if @map.count > @max 
+      eject! if count > @max 
     end
-    puts val
+    # p @store.map { |l| l.key}
+    # puts val
     val
   end
 
@@ -40,13 +46,17 @@ class LRUCache
 
   def update_node!(node)
     @store.remove(node.key) 
-    @store.append(node)
+    @store.append(node.key, node.val)
+    @map.set(node.key, node.val)
+    @map[node.key] = node 
     # suggested helper method; move a node to the end of the list
   end
 
   def eject!
-    key = @store.first
-    @store.remove(key) 
-    @map.delete(key)
+    # p @store.map { |l| l.key}
+    node = @store.first
+    @store.remove(node.key) 
+    @map.delete(node.key)
+    nil
   end
 end

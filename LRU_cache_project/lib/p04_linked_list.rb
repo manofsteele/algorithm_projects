@@ -51,6 +51,7 @@ class LinkedList
         return node.val 
       end 
     end
+    nil
   end
 
   def include?(key)
