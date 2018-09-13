@@ -4,9 +4,9 @@ class DynamicProgramming
     @blair_cache = {1 => 1, 2 => 2}
     
     @frog_cache = {
-      1 => [ [1] ],
-      2 => [ [1, 1], [2] ],
-      3 => [ [1, 1, 1], [2, 1], [1, 2], [3] ]
+      # 1 => [ [1] ],
+      # 2 => [ [1, 1], [2] ],
+      # 3 => [ [1, 1, 1], [2, 1], [1, 2], [3] ]
     }
 
   end
@@ -50,26 +50,25 @@ class DynamicProgramming
   end
 
   def frog_hops_top_down_helper(n)
+    return @frog_cache[n] if @frog_cache[n]
+    frog_hops_top_down_helper(n - 1) if n > 1  
     if n == 1 
       @frog_cache[1] = [ [1] ]
-    elsif 
-      n == 2 
+    elsif n == 2 
       @frog_cache[2] =  [ [1, 1], [2] ]
     elsif n == 3
       @frog_cache[3] =  [ [1, 1, 1], [2, 1], [1, 2], [3] ]
-    elsif @frog_cache[n - 1].nil? && n > 3
-      @frog_cache[n - 1] = frog_hops_top_down_helper(n - 1)
     end
-    
+    if n > 3
       cache = []
-        (1..3).each do |i|
-          @frog_cache[n - i].each do |arr| 
-            cache << arr + [i] 
-            cache << [i] + arr 
-          end 
-        end
-      @frog_cache[n] = cache.uniq
-    
+      (1..3).each do |i|
+        @frog_cache[n - i].each do |arr| 
+          cache << arr + [i] 
+          cache << [i] + arr 
+        end 
+      end
+      @frog_cache[n] = cache.uniq 
+    end 
     @frog_cache[n]
   end
 
