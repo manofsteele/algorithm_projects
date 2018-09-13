@@ -2,6 +2,13 @@ class DynamicProgramming
 
   def initialize
     @blair_cache = {1 => 1, 2 => 2}
+    
+    @frog_cache = {
+      1 => [ [1] ],
+      2 => [ [1, 1], [2] ],
+      3 => [ [1, 1, 1], [2, 1], [1, 2], [3] ]
+    }
+
   end
 
   def blair_nums(n)
@@ -37,11 +44,33 @@ class DynamicProgramming
   end
 
   def frog_hops_top_down(n)
- 
+    # return @frog_cache[n] if @frog_cache[n]
+    frog_hops_top_down_helper(n)
+    
   end
 
   def frog_hops_top_down_helper(n)
-
+    if n == 1 
+      @frog_cache[1] = [ [1] ]
+    elsif 
+      n == 2 
+      @frog_cache[2] =  [ [1, 1], [2] ]
+    elsif n == 3
+      @frog_cache[3] =  [ [1, 1, 1], [2, 1], [1, 2], [3] ]
+    elsif @frog_cache[n - 1].nil? && n > 3
+      @frog_cache[n - 1] = frog_hops_top_down_helper(n - 1)
+    end
+    
+      cache = []
+        (1..3).each do |i|
+          @frog_cache[n - i].each do |arr| 
+            cache << arr + [i] 
+            cache << [i] + arr 
+          end 
+        end
+      @frog_cache[n] = cache.uniq
+    
+    @frog_cache[n]
   end
 
   def super_frog_hops(n, k)
@@ -60,3 +89,5 @@ class DynamicProgramming
   def maze_solver(maze, start_pos, end_pos)
   end
 end
+
+instance = DynamicProgramming.new()
