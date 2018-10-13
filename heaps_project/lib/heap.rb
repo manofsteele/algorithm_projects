@@ -40,13 +40,60 @@ class BinaryMinHeap
 
   def self.heapify_down(array, parent_idx, len = array.length, &prc)
     prc ||= Proc.new {|a, b| a <=> b}
-    child_indices(len, parent_idx).each do |idx| 
-      if prc.call(array[idx], array[parent_idx]) < 0 
-        array[idx], array[parent_idx] = array[parent_idx], array[idx]
-        parent_idx = idx 
+    
+    child_indices = child_indices(len, parent_idx) 
+    return if child_indices.length == 0 
+
+    child_idx1, child_idx2 = child_indices
+    
+    diff1 = prc.call(array[parent_idx], array[child_idx1]) 
+    diff2 = prc.call(array[parent_idx], array[child_idx2])
+    diff_children = prc.call(array[child_idx1], array[child_idx2])
+
+    changed = false
+    if diff1 > 0 && diff2 > 0 
+      if diff_children > 0 
+        array[parent_idx], array[child_idx1] = array[child_idx1], array[parent_idx] 
+      else 
+        array[parent_idx], array[child_idx2] = array[child_idx2], array[parent_idx] 
       end 
+      changed = true
+    elsif diff1 > 0 
+      array[parent_idx], array[child_idx1] = array[child_idx1], array[parent_idx] 
+      changed = true
+    elsif diff2 > 0
+      array[parent_idx], array[child_idx2] = array[child_idx2], array[parent_idx] 
+      changed = true
+    else 
+      changed = false
+      return 
+    end 
+    
+    p array 
+    if changed
+      self.heapify_down(array, parent_idx)
+    else
+      self.heapify_down(array, parent_idx + 1)
     end
-    array 
+    # self.heapify_down(array, child_idx1)
+    # self.heapify_down(array, child_idx2)
+    
+    array
+
+    # children = []
+    # child_indices[len, parent_idx].each do |idx|
+    #   children << array[idx] if array[idx] 
+    # end
+      
+    #   child_indices(len, parent_idx).each do |idx| 
+    #   if prc.call(array[idx], array[parent_idx]) <= 0 
+    #     array[idx], array[parent_idx] = array[parent_idx], array[idx]
+    #     parent_idx = idx 
+    #   end 
+    # end
+    # self.heapify_down(array, parent_idx, len, &prc)
+
+    # array 
   end
 
   def self.heapify_up(array, child_idx, len = array.length, &prc)
