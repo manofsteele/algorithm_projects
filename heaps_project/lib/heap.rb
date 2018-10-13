@@ -52,13 +52,14 @@ class BinaryMinHeap
 
     changed = false
     if diff1 > 0 && diff2 > 0 
-      if diff_children > 0 
+      if diff_children < 0 
         array[parent_idx], array[child_idx1] = array[child_idx1], array[parent_idx] 
       else 
         array[parent_idx], array[child_idx2] = array[child_idx2], array[parent_idx] 
       end 
       changed = true
     elsif diff1 > 0 
+    # if diff1 > 0
       array[parent_idx], array[child_idx1] = array[child_idx1], array[parent_idx] 
       changed = true
     elsif diff2 > 0
@@ -66,17 +67,17 @@ class BinaryMinHeap
       changed = true
     else 
       changed = false
-      return 
     end 
     
     p array 
-    if changed
-      self.heapify_down(array, parent_idx)
-    else
-      self.heapify_down(array, parent_idx + 1)
-    end
-    # self.heapify_down(array, child_idx1)
-    # self.heapify_down(array, child_idx2)
+    # if changed
+    #   BinaryMinHeap.heapify_down(array, parent_idx)
+    # else
+    #   self.heapify_down(array, parent_idx + 1)
+    # end
+    BinaryMinHeap.heapify_down(array, child_idx1)
+    BinaryMinHeap.heapify_down(array, child_idx2)
+    # end
     
     array
 
