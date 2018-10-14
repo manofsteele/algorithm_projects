@@ -46,9 +46,17 @@ class BinaryMinHeap
 
     child_idx1, child_idx2 = child_indices
     
-    diff1 = prc.call(array[parent_idx], array[child_idx1]) 
-    diff2 = prc.call(array[parent_idx], array[child_idx2])
-    diff_children = prc.call(array[child_idx1], array[child_idx2])
+    diff1 = prc.call(array[parent_idx], array[child_idx1])
+    if child_idx2 
+      diff2 = prc.call(array[parent_idx], array[child_idx2])
+    else 
+      diff2 = 0 
+    end
+    if child_idx2
+      diff_children = prc.call(array[child_idx1], array[child_idx2])
+    else 
+      diff_children = 0 
+    end 
 
     changed = false
     if diff1 > 0 && diff2 > 0 
@@ -69,14 +77,15 @@ class BinaryMinHeap
       changed = false
     end 
     
-    p array 
     # if changed
     #   BinaryMinHeap.heapify_down(array, parent_idx)
     # else
     #   self.heapify_down(array, parent_idx + 1)
     # end
-    BinaryMinHeap.heapify_down(array, child_idx1)
-    BinaryMinHeap.heapify_down(array, child_idx2)
+    BinaryMinHeap.heapify_down(array, child_idx1, &prc)
+    if child_idx2
+      BinaryMinHeap.heapify_down(array, child_idx2, &prc)
+    end
     # end
     
     array
