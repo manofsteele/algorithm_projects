@@ -8,15 +8,22 @@ class BinaryMinHeap
   end
 
   def count
+    @store.length
   end
 
   def extract
+    val = @store.shift 
+    BinaryMinHeap.heapify_down(@store, 0, &prc)
+    return val
   end
 
   def peek
+    @store.first
   end
 
   def push(val)
+    @store.push(val)
+    BinaryMinHeap.heapify_up(@store, @store.length - 1, &prc)
   end
 
   public
@@ -107,5 +114,15 @@ class BinaryMinHeap
   end
 
   def self.heapify_up(array, child_idx, len = array.length, &prc)
+    prc ||= Proc.new {|a, b| a <=> b}
+    return array if child_idx == 0
+    parent_idx = parent_index(child_idx)
+    diff = prc.call(array[parent_idx], array[child_idx])
+    if diff > 0 
+      array[parent_idx], array[child_idx] = array[child_idx], array[parent_idx]
+      BinaryMinHeap.heapify_up(array, parent_idx, &prc) unless parent_idx == 0
+    end 
+    array
   end
+
 end
