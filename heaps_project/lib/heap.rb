@@ -49,7 +49,7 @@ class BinaryMinHeap
     prc ||= Proc.new {|a, b| a <=> b}
     
     child_indices = child_indices(len, parent_idx) 
-    return if child_indices.length == 0 
+    return array if child_indices.length == 0 
 
     child_idx1, child_idx2 = child_indices
     
@@ -84,8 +84,6 @@ class BinaryMinHeap
       changed = false
     end 
     
-    # if changed
-    #   BinaryMinHeap.heapify_down(array, parent_idx)
     # else
     #   self.heapify_down(array, parent_idx + 1)
     # end
@@ -93,10 +91,13 @@ class BinaryMinHeap
     if child_idx2
       BinaryMinHeap.heapify_down(array, child_idx2, &prc)
     end
+    if changed
+      BinaryMinHeap.heapify_down(array, 0, &prc)
+    end
     # end
     
+    # puts "heapified_down: #{array}"
     array
-
     # children = []
     # child_indices[len, parent_idx].each do |idx|
     #   children << array[idx] if array[idx] 
