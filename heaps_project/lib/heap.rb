@@ -45,73 +45,117 @@ class BinaryMinHeap
   # do something with the proc to make it test for difference... 
   # compare differences between two child nodes 
 
+  # def self.heapify_down(array, parent_idx, len = array.length, &prc)
+  #   prc ||= Proc.new {|a, b| a <=> b}
+    
+  #   child_indices = child_indices(len, parent_idx) 
+  #   return array if child_indices.length == 0 
+
+  #   child_idx1, child_idx2 = child_indices
+    
+  #   diff1 = prc.call(array[parent_idx], array[child_idx1])
+  #   if child_idx2 
+  #     diff2 = prc.call(array[parent_idx], array[child_idx2])
+  #   else 
+  #     diff2 = 0 
+  #   end
+  #   if child_idx2
+  #     diff_children = prc.call(array[child_idx1], array[child_idx2])
+  #   else 
+  #     diff_children = 0 
+  #   end 
+
+  #   changed = false
+  #   if diff1 > 0 && diff2 > 0 
+  #     if diff_children < 0 
+  #       array[parent_idx], array[child_idx1] = array[child_idx1], array[parent_idx] 
+  #     else 
+  #       array[parent_idx], array[child_idx2] = array[child_idx2], array[parent_idx] 
+  #     end 
+  #     changed = true
+  #   elsif diff1 > 0 
+  #   # if diff1 > 0
+  #     array[parent_idx], array[child_idx1] = array[child_idx1], array[parent_idx] 
+  #     changed = true
+  #   elsif diff2 > 0
+  #     array[parent_idx], array[child_idx2] = array[child_idx2], array[parent_idx] 
+  #     changed = true
+  #   else 
+  #     changed = false
+  #   end 
+    
+  #   # else
+  #   #   self.heapify_down(array, parent_idx + 1)
+  #   # end
+  #   BinaryMinHeap.heapify_down(array, child_idx1, &prc)
+  #   if child_idx2
+  #     BinaryMinHeap.heapify_down(array, child_idx2, &prc)
+  #   end
+  #   if changed
+  #     BinaryMinHeap.heapify_down(array, 0, &prc)
+  #   end
+  #   # end
+    
+  #   # puts "heapified_down: #{array}"
+  #   array
+  #   # children = []
+  #   # child_indices[len, parent_idx].each do |idx|
+  #   #   children << array[idx] if array[idx] 
+  #   # end
+      
+  #   #   child_indices(len, parent_idx).each do |idx| 
+  #   #   if prc.call(array[idx], array[parent_idx]) <= 0 
+  #   #     array[idx], array[parent_idx] = array[parent_idx], array[idx]
+  #   #     parent_idx = idx 
+  #   #   end 
+  #   # end
+  #   # self.heapify_down(array, parent_idx, len, &prc)
+
+  #   # array 
+  # end
+
   def self.heapify_down(array, parent_idx, len = array.length, &prc)
     prc ||= Proc.new {|a, b| a <=> b}
     
     child_indices = child_indices(len, parent_idx) 
-    return array if child_indices.length == 0 
+    left, right = child_indices
+    
+    idx = parent_idx 
 
-    child_idx1, child_idx2 = child_indices
-    
-    diff1 = prc.call(array[parent_idx], array[child_idx1])
-    if child_idx2 
-      diff2 = prc.call(array[parent_idx], array[child_idx2])
-    else 
-      diff2 = 0 
-    end
-    if child_idx2
-      diff_children = prc.call(array[child_idx1], array[child_idx2])
-    else 
-      diff_children = 0 
-    end 
-
-    changed = false
-    if diff1 > 0 && diff2 > 0 
-      if diff_children < 0 
-        array[parent_idx], array[child_idx1] = array[child_idx1], array[parent_idx] 
-      else 
-        array[parent_idx], array[child_idx2] = array[child_idx2], array[parent_idx] 
-      end 
-      changed = true
-    elsif diff1 > 0 
-    # if diff1 > 0
-      array[parent_idx], array[child_idx1] = array[child_idx1], array[parent_idx] 
-      changed = true
-    elsif diff2 > 0
-      array[parent_idx], array[child_idx2] = array[child_idx2], array[parent_idx] 
-      changed = true
-    else 
-      changed = false
-    end 
-    
-    # else
-    #   self.heapify_down(array, parent_idx + 1)
-    # end
-    BinaryMinHeap.heapify_down(array, child_idx1, &prc)
-    if child_idx2
-      BinaryMinHeap.heapify_down(array, child_idx2, &prc)
-    end
-    if changed
-      BinaryMinHeap.heapify_down(array, 0, &prc)
-    end
-    # end
-    
-    # puts "heapified_down: #{array}"
-    array
-    # children = []
-    # child_indices[len, parent_idx].each do |idx|
-    #   children << array[idx] if array[idx] 
-    # end
+    # while idx < len
+      child_indices = child_indices(len, idx) 
+      left, right = child_indices
       
-    #   child_indices(len, parent_idx).each do |idx| 
-    #   if prc.call(array[idx], array[parent_idx]) <= 0 
-    #     array[idx], array[parent_idx] = array[parent_idx], array[idx]
-    #     parent_idx = idx 
-    #   end 
-    # end
-    # self.heapify_down(array, parent_idx, len, &prc)
+      changed = true
+      until changed == false
+        changed = false
+      if left && prc.call(array[left], array[parent_idx]) < 0
+        idx = left
+        array[parent_idx], array[left] = array[left], array[parent_idx]
+        self.heapify_down(array, left, &prc)
+        changed = true
+      end 
+      if right && prc.call(array[right], array[parent_idx]) < 0
+        idx = right
+        array[parent_idx], array[right] = array[right], array[parent_idx]
+        self.heapify_down(array, right, &prc)
+        changed = true
+      end
+      
+    end
 
-    # array 
+      return array if idx == parent_idx
+      # array[parent_idx], array[idx] = array[idx], array[parent_idx]
+      # parent_idx = idx
+      # child_indices = child_indices(len, parent_idx) 
+      # left, right = child_indices
+      # idx = parent_idx
+      # self.heapify_down(array, left, &prc)
+      # self.heapify_down(array, right, &prc)
+      p array
+    # end
+      # i -= 1 
+    array
   end
 
   def self.heapify_up(array, child_idx, len = array.length, &prc)

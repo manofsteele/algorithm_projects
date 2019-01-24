@@ -3,6 +3,7 @@ require_relative "heap"
 class Array
   def heap_sort!
     BinaryMinHeap.heapify_down(self, 0)
+    puts "self: #{self}"
     (0...self.length - 2).each do |idx| 
       rest_of_array = BinaryMinHeap.heapify_down(self[idx + 1..-1], 0)
       # p rest_of_array
